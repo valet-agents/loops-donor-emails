@@ -1,0 +1,79 @@
+name: loops-donor-emails
+display_name: Loops Donor Emails
+description: >-
+  Watches donor email campaigns in Loops and surfaces opens,
+  clicks, and replies after each send — flagging donors whose
+  engagement is climbing so the development team knows who's
+  warming up before the next ask. Posts a daily digest to Slack
+  and answers donor questions on @mention.
+category: nonprofit
+
+story:
+  hero: "Know which donors are warming up before the next ask."
+  subheadline: >-
+    After each campaign, it surfaces opens, clicks, and replies —
+    and flags donors whose engagement is climbing.
+  steps:
+    - role: trigger
+      title: "8am hits."
+      body: >-
+        The cron fires Monday through Friday. No dashboard to
+        check, no spreadsheet to refresh.
+    - role: action
+      title: "It reads yesterday's donor engagement."
+      body: >-
+        Pulls every campaign sent in the last 24 hours, computes
+        opens, clicks, and replies, and ranks donors by recency
+        and signal strength.
+      catalog: loops
+    - role: outcome
+      title: "Warming donors flagged in Slack."
+      body: >-
+        Top 5 donors with the strongest signals — what they
+        opened, what they clicked, when. @mention the bot to
+        dig into any name.
+      catalog: slack
+
+connectors:
+  - catalog: loops
+    description: >-
+      The Loops CLI, on PATH as `loops`, authenticated with
+      `LOOPS_API_KEY`. The agent lists donor campaigns, pulls
+      aggregate metrics, and reads per-contact engagement
+      events. Transactional sends and tag changes only happen
+      when a Slack user explicitly asks and confirms.
+    secrets:
+      - slot: LOOPS_API_KEY
+        description: >-
+          Loops API key, scoped to the workspace whose donor
+          list you want the agent to watch. Generate it in
+          Loops → Settings → API.
+    ui:
+      headline: "Connect Loops with your API key."
+      blurb: >-
+        Paste your Loops API key — the agent uses it to read
+        donor campaigns and per-contact engagement. Transactional
+        sends require write scope and only fire on your explicit
+        Slack confirmation.
+      done_note: "Loops connected"
+
+channels:
+  - catalog: slack
+    description: >-
+      The agent gets its own Slack bot. Invite it to whichever
+      channels you want the daily donor digest in, and to any
+      other channel where teammates should be able to @mention
+      it for ad-hoc donor questions.
+    ui:
+      headline: "Give Donor Emails a Slack bot."
+      blurb: >-
+        The agent posts the daily digest to every channel you
+        invite it to. Invite it to one focused fundraising
+        channel, or several — whatever matches how your
+        development team works.
+      done_note: "Bot ready — invite it to a channel"
+
+  - type: cron
+    cron: "0 8 * * 1-5"
+    timezone: America/Los_Angeles
+    description: "Fires the daily donor engagement digest at 8am Pacific, Monday through Friday."
