@@ -8,6 +8,9 @@ description: >-
   and answers donor questions on @mention.
 category: nonprofit
 
+example:
+  prompt: "How's the year-end appeal performing?"
+
 story:
   hero: "Know which donors are warming up before the next ask."
   subheadline: >-
