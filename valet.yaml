@@ -45,12 +45,11 @@ connectors:
       aggregate metrics, and reads per-contact engagement
       events. Transactional sends and tag changes only happen
       when a Slack user explicitly asks and confirms.
-    secrets:
-      - slot: LOOPS_API_KEY
-        description: >-
-          Loops API key, scoped to the workspace whose donor
-          list you want the agent to watch. Generate it in
-          Loops → Settings → API.
+    slot_descriptions:
+      LOOPS_API_KEY: >-
+        Loops API key, scoped to the workspace whose donor
+        list you want the agent to watch. Generate it in
+        Loops → Settings → API.
     ui:
       headline: "Connect Loops with your API key."
       blurb: >-
